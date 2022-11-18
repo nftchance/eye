@@ -1,0 +1,8 @@
+✔ Get the database up and running with a model @done(22-11-18 13:54)
+✔ Get the script running that will schedule all the blinks @done(22-11-18 13:54)
+✔ Get the script running that will blink @done(22-11-18 13:55)
+☐ Get websockets running to send the blink data to the web page
+☐ Get the web page to display the data
+☐ Get the web page to display the data in a way that is easy to read
+
+☐ Add the ability to group blinks under an organization

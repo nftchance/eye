@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  database:
+    image: postgres:13.2
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_USER: eye
+      POSTGRES_PASSWORD: eye
+      POSTGRES_DB: eye
+    volumes:
+      - ./api/database:/var/lib/postgresql/data
+    hostname: database
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:6.2.1
+    container_name: redis
+    restart: always
+    hostname: redis
+    ports:
+      - 6379:6379
