@@ -8,17 +8,23 @@ const Organization = () => {
     const {
         blinks,
         error
-    } = useBlinks({organizationId});
-
-    console.log(blinks, error);
+    } = useBlinks({ organizationId });
 
     return (
         <>
-            <h1>Organization</h1>
-            <h2>{organizationId}</h2>
+            <h1>{organizationId}</h1>
 
             {blinks && blinks.map(blink => (
-                <p key={blink.id}>{blink.url}</p>
+                <div key={blink.id}>
+                    <hr />
+                    <p>Id: {blink.id}</p>
+                    <p>URL: {blink.url}</p>
+                    <p>Scheduled: {blink.scheduled}</p>
+                    <p>Frequency: {blink.frequency}</p>
+                    <p>Updated: {blink.updated}</p>
+                    <p>Created: {blink.created}</p>
+                    <p>Status: {blink.status}</p>
+                </div>
             ))}
         </>
     )

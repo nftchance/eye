@@ -4,16 +4,16 @@ from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .models import Blink
+from .models import Eye
 from .serializers import BlinkSerializer
+from .utils import DateTimeEncoder
 
 class BlinkConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        # TODO: Use for organization groupings
-        # self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-
-        self.room_name = "blink"
+        self.room_name = self.scope["url_route"]["kwargs"]["organization_id"]
         self.room_group_name = "organization_%s" % self.room_name
+
+        print("Connected to:", self.room_group_name)
 
         await self.channel_layer.group_add(
             self.room_group_name, 
@@ -37,6 +37,8 @@ class BlinkConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
 
+        print('received', text_data_json)
+
         type = text_data_json["type"]
         message = text_data_json["message"] if 'message' in text_data_json else None
 
@@ -49,23 +51,21 @@ class BlinkConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # Receive message from room group
-    async def chat_message(self, event):
-        print('in chat_message')
-
-        message = event["message"]
-
+    async def get_blink(self, event):
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             "type": event["type"],
-            "payload": message
-        }))
+            "payload": event["payload"]
+        }, cls=DateTimeEncoder))
 
     @database_sync_to_async
     def db_get_blinks(self):
-        blinks = Blink.objects.all()
+        if not Eye.objects.filter(id=self.room_name).exists():
+            return []
 
-        serializer = BlinkSerializer(blinks, many=True)
+        eye = Eye.objects.get(id=self.room_name)
+
+        serializer = BlinkSerializer(eye.blinks.all(), many=True)
 
         return serializer.data
 
@@ -74,5 +74,5 @@ class BlinkConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps({
             "type": event["type"],
-            "payload": blinks
+            "payload": json.dumps(blinks, cls=DateTimeEncoder)
         }))

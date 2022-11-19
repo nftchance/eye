@@ -1,13 +1,17 @@
-import datetime
 import django
+import json
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 
-from .models import Blink
+from .models import Blink, Eye
+from .serializers import BlinkSerializer
+from .utils import DateTimeEncoder
 
 scheduler = BackgroundScheduler()
 
@@ -43,11 +47,24 @@ def trigger_blinks():
 
 @util.close_old_connections
 def check_blink(blink_id):
-    # Get the blink
     blink = Blink.objects.get(id=blink_id)
-
-    # Check the status of the blink
     blink.blink()
+
+    channel_layer = get_channel_layer()
+
+    eye = Eye.objects.filter(blinks__in=[blink]).first()
+    serializer = BlinkSerializer([blink], many=True)
+
+    async_to_sync(channel_layer.group_send)(
+        'organization_%s' % eye.id,
+        {
+            'type': 'get_blink',
+            'payload': json.dumps(
+                serializer.data,
+                cls=DateTimeEncoder
+            )
+        }
+    )
 
 @util.close_old_connections
 def delete_old_job_executions(max_age=60 * 60):

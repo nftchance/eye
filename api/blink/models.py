@@ -1,6 +1,9 @@
 import datetime
 import django
 import requests
+import uuid
+
+# import async to sync
 
 from django.db import models
 
@@ -29,6 +32,7 @@ class Blink(models.Model):
         return self.url
 
     def blink(self):
+
         now = django.utils.timezone.now()
 
         # Check the status of the blink
@@ -46,3 +50,17 @@ class Blink(models.Model):
 
         # Save the changes
         self.save()
+
+class Eye(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+
+    blinks = models.ManyToManyField(Blink)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name

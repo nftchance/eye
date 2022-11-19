@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Blink, Eye 
+
+admin.site.register(Blink)
+admin.site.register(Eye)

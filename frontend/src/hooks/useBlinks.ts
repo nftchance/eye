@@ -25,33 +25,35 @@ const useBlinks = ({
         [organizationId]
     )
 
+    // Catch the incoming messages
+    client.onmessage = (message: IMessageEvent) => {
+        const data: Response = JSON.parse(message.data.toString());
+
+        const payloadBlinks = JSON.parse(data.payload) as Blink[];
+
+        if (data.type === 'get_blinks') {
+            setBlinks(payloadBlinks);
+        } else if (data.type == 'get_blink') { 
+            const updatedBlinks = blinks.map(blink => {
+                if (blink.id == payloadBlinks[0].id) {
+                    return payloadBlinks[0];
+                }
+
+                return blink;
+            });
+
+            setBlinks(updatedBlinks);
+        }
+    }
+
+    client.onerror = (error) => {
+        setError(error);
+    }
+
     useEffect(() => {
-        client.onopen = () => {
-            console.log('WebSocket Client Connected');
-        };
-
-        // Catch the incoming messages
-        client.onmessage = (message: IMessageEvent) => {
-            const data: Response = JSON.parse(message.data.toString());
-
-            if (data.type === 'get_blinks') {
-                setBlinks(data.payload);
-            }
-        }
-
-        client.onclose = () => {
-            console.log('websocket closed');
-        }
-
-        client.onerror = (error) => {
-            setError(error);
-        }
-
         return () => {
-            // Only close once the websocket has already been opened
-            if (client.readyState === 1) {
+            if (client.readyState === 1)
                 client.close();
-            }
         }
     }, [])
 

@@ -2,7 +2,7 @@ import { Blink } from './Blink';
 
 interface Response { 
     type: string;
-    payload: Blink[];
+    payload: string;
 }
 
 export type {Response}
