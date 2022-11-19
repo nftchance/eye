@@ -8,7 +8,7 @@ interface Field {
     error: string | null;
 }
 
-const OrganizationForm = () => {
+const EyeForm = () => {
     const initialFields = [
         { name: "name", label: "Name", type: "text", value: "", error: null },
     ];
@@ -85,4 +85,4 @@ const OrganizationForm = () => {
     )
 }
 
-export default OrganizationForm
+export default EyeForm

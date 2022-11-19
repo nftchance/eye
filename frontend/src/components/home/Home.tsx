@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import OrganizationForm from "../organization/OrganizationForm";
+import EyeForm from "../Eye/EyeForm";
 
 const Home = () => {
 
@@ -9,7 +9,7 @@ const Home = () => {
             <h1>Blink</h1>
             <p>A simpler way to achieve higher uptime rates.</p>
 
-            <OrganizationForm />
+            <EyeForm />
         </>
     )
 }

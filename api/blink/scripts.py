@@ -56,10 +56,10 @@ def check_blink(blink_id):
     serializer = BlinkSerializer([blink], many=True)
 
     async_to_sync(channel_layer.group_send)(
-        'organization_%s' % eye.id,
+        'eye_%s' % eye.id,
         {
             'type': 'get_blink',
-            'payload': json.dumps(
+            'message': json.dumps(
                 serializer.data,
                 cls=DateTimeEncoder
             )

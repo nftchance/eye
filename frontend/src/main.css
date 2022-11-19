@@ -1,14 +1,24 @@
-* { 
+* {
   box-sizing: border-box;
+  font-family: 'Roboto Mono', sans-serif;
 }
 
-html, body { 
+html,
+body {
   margin: 0;
   padding: 0;
+  background: #0e0e0e;
+  color: #fff;
 }
 
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+p, a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, .85);
+  font-size: 12px;
 }

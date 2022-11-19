@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import loadable from '@loadable/component';
 
 const LoadableHome = loadable(() => import('./components/home/Home'));
-const LoadableOrganization = loadable(() => import('./components/organization/Organization'));
+const LoadableEye = loadable(() => import('./components/eye/Eye'));
 
 const App = () => {
   return (
@@ -13,11 +13,11 @@ const App = () => {
           path="/" 
           element={<LoadableHome />} />
         <Route 
-          path="/organization" 
-          element={<LoadableOrganization />} />
+          path="/eye" 
+          element={<LoadableEye />} />
         <Route 
-          path="/organization/:organizationId" 
-          element={<LoadableOrganization />} />
+          path="/eye/:eyeId" 
+          element={<LoadableEye />} />
       </Routes>
     </>
   )

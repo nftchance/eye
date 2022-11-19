@@ -10,10 +10,8 @@ from .utils import DateTimeEncoder
 
 class BlinkConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["organization_id"]
-        self.room_group_name = "organization_%s" % self.room_name
-
-        print("Connected to:", self.room_group_name)
+        self.room_name = self.scope["url_route"]["kwargs"]["Eye_id"]
+        self.room_group_name = "eye_%s" % self.room_name
 
         await self.channel_layer.group_add(
             self.room_group_name, 
@@ -21,19 +19,16 @@ class BlinkConsumer(AsyncWebsocketConsumer):
         )
         await self.accept()
 
-        # Load the initial blinks of the organization when connecting to its layer
         await self.get_blinks({
             "type": "get_blinks"
         })
 
     async def disconnect(self, close_code):
-        # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name, 
             self.channel_name
         )
 
-    # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
 
@@ -52,10 +47,9 @@ class BlinkConsumer(AsyncWebsocketConsumer):
         )
 
     async def get_blink(self, event):
-        # Send message to WebSocket
         await self.send(text_data=json.dumps({
             "type": event["type"],
-            "payload": event["payload"]
+            "payload": event["message"]
         }, cls=DateTimeEncoder))
 
     @database_sync_to_async

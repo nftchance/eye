@@ -4,5 +4,5 @@ from django.urls import path
 from . import consumers
 
 websocket_urlpatterns = [
-    path("ws/<organization_id>/", consumers.BlinkConsumer.as_asgi()),
+    path("ws/<Eye_id>/", consumers.BlinkConsumer.as_asgi()),
 ]

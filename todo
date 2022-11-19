@@ -1,11 +1,11 @@
 ✔ Get the database up and running with a model @done(22-11-18 13:54)
 ✔ Get the script running that will schedule all the blinks @done(22-11-18 13:54)
 ✔ Get the script running that will blink @done(22-11-18 13:55)
-✔ Get the websockets to where we can connect based on organization id @done(22-11-18 19:36)
+✔ Get the websockets to where we can connect based on Eye id @done(22-11-18 19:36)
+✔ Get the ability to assign a blink to an Eye @done(22-11-18 23:13)
+✔ Get websockets running to send the blink data to the web page @done(22-11-18 23:14)
+✔ Get the web page to display the data @done(22-11-18 23:14)
+✔ Get the web page to display the data in a way that is easy to read @done(22-11-18 23:14)
+✔ Add the ability to group blinks under an Eye @done(22-11-18 23:14)
 
-☐ Get the ability to assign a blink to an organization
-☐ Get websockets running to send the blink data to the web page
-☐ Get the web page to display the data
-☐ Get the web page to display the data in a way that is easy to read
-
-☐ Add the ability to group blinks under an organization
+☐ Add the ability to create a new blink

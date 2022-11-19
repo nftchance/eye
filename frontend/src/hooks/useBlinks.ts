@@ -5,24 +5,24 @@ import { IMessageEvent, w3cwebsocket as W3CWebSocket } from "websocket";
 import { Blink, Response } from "../types"
 
 const useBlinks = ({
-    organizationId
+    eyeId
 }: { 
-    organizationId: string | undefined
+    eyeId: string | undefined
 }): {
     blinks: Blink[] | null,
     error: {} | null,
 } => {
-    if (!organizationId) {
-        return { blinks: null, error: { message: "no organization id" } };
+    if (!eyeId) {
+        return { blinks: null, error: { message: "no Eye id" } };
     }
 
-    // connect to the websocket for the organization id
+    // connect to the websocket for the Eye id
     const [blinks, setBlinks] = useState<Blink[]>([]);
     const [error, setError] = useState<{} | null>(null);
 
     const client = useMemo(
-        () => new W3CWebSocket(`ws://127.0.0.1:8000/ws/${organizationId}/`),
-        [organizationId]
+        () => new W3CWebSocket(`ws://127.0.0.1:8000/ws/${eyeId}/`),
+        [eyeId]
     )
 
     // Catch the incoming messages
