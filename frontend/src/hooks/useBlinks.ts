@@ -16,7 +16,6 @@ const useBlinks = ({
         return { blinks: null, error: { message: "no Eye id" } };
     }
 
-    // connect to the websocket for the Eye id
     const [blinks, setBlinks] = useState<Blink[]>([]);
     const [error, setError] = useState<{} | null>(null);
 
@@ -25,25 +24,44 @@ const useBlinks = ({
         [eyeId]
     )
 
+    const typeCaller = (type: string) => {
+        switch (type) {
+            case "create_blink":
+                break;
+            case "get_blinks":
+                break; 
+            case "get_blink":
+                break;
+            case "update_blink":
+                break;
+            case "delete_blink":
+                break;
+            default:
+                return () => { };
+        }
+    }
+
     // Catch the incoming messages
     client.onmessage = (message: IMessageEvent) => {
         const data: Response = JSON.parse(message.data.toString());
 
         const payloadBlinks = JSON.parse(data.payload) as Blink[];
 
+        let newBlinks = [...blinks];
+
         if (data.type === 'get_blinks') {
-            setBlinks(payloadBlinks);
+            newBlinks = payloadBlinks;
         } else if (data.type == 'get_blink') { 
-            const updatedBlinks = blinks.map(blink => {
-                if (blink.id == payloadBlinks[0].id) {
-                    return payloadBlinks[0];
-                }
+            newBlinks = blinks.map(blink => blink.id == payloadBlinks[0].id ? payloadBlinks[0] : blink);
+        } else if (data.type == 'create_blink') {
+            // newBlinks = [...blinks, payloadBlinks[0]];
+        } else if (data.type == 'update_blink') {
+            // newBlinks = blinks.map(blink => blink.id == payloadBlinks[0].id ? payloadBlinks[0] : blink);
+        } else if (data.type == 'delete_blink') {
+            // newBlinks = blinks.filter(blink => blink.id != payloadBlinks[0].id);
+        } 
 
-                return blink;
-            });
-
-            setBlinks(updatedBlinks);
-        }
+        setBlinks(newBlinks);
     }
 
     client.onerror = (error) => {

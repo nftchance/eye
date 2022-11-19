@@ -1,5 +1,4 @@
 import django
-import json
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -11,7 +10,6 @@ from django_apscheduler import util
 
 from .models import Blink, Eye
 from .serializers import BlinkSerializer
-from .utils import DateTimeEncoder
 
 scheduler = BackgroundScheduler()
 
@@ -53,16 +51,14 @@ def check_blink(blink_id):
     channel_layer = get_channel_layer()
 
     eye = Eye.objects.filter(blinks__in=[blink]).first()
-    serializer = BlinkSerializer([blink], many=True)
 
     async_to_sync(channel_layer.group_send)(
         'eye_%s' % eye.id,
         {
             'type': 'get_blink',
-            'message': json.dumps(
-                serializer.data,
-                cls=DateTimeEncoder
-            )
+            'message': {
+                "id": blink.id,
+            }
         }
     )
 

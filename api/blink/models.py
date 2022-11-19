@@ -3,15 +3,14 @@ import django
 import requests
 import uuid
 
-# import async to sync
-
 from django.db import models
 
 class Blink(models.Model):
-    PENDING, FAILED, SUCCESS, ERROR = 'P', 'F', 'S', 'E'
+    PENDING, HALTED, FAILED, SUCCESS, ERROR = 'P', 'H', 'F', 'S', 'E'
 
     STATUSES = (
         (PENDING, 'Pending'),
+        (HALTED, 'Halted'),
         (FAILED, 'Failed'),    
         (SUCCESS, 'Success'),
         (ERROR, 'Error'),

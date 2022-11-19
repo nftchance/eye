@@ -1,10 +1,9 @@
 import json
 
-from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .models import Eye
+from .models import Eye, Blink
 from .serializers import BlinkSerializer
 from .utils import DateTimeEncoder
 
@@ -32,12 +31,9 @@ class BlinkConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
 
-        print('received', text_data_json)
-
         type = text_data_json["type"]
         message = text_data_json["message"] if 'message' in text_data_json else None
 
-        # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name, 
             {
@@ -46,10 +42,20 @@ class BlinkConsumer(AsyncWebsocketConsumer):
             }
         )
 
+    @database_sync_to_async
+    def db_get_blink(self, blink_id):
+        blink = Blink.objects.get(id=blink_id)
+
+        serializer = BlinkSerializer([blink], many=True)
+
+        return serializer.data
+
     async def get_blink(self, event):
+        blinks = await self.db_get_blink(event["message"]["id"])
+
         await self.send(text_data=json.dumps({
             "type": event["type"],
-            "payload": event["message"]
+            "payload": json.dumps(blinks, cls=DateTimeEncoder)
         }, cls=DateTimeEncoder))
 
     @database_sync_to_async
