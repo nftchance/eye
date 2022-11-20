@@ -4,7 +4,6 @@ from .models import Blink, Eye
 
 class EyeSerializer(serializers.ModelSerializer):
     blinks = serializers.PrimaryKeyRelatedField(
-        queryset=Blink.objects.all(), 
         many=True,
         required=False,
         read_only=True

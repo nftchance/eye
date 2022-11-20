@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { useEye } from '../../hooks/useEye'
 
-import EyeForm from "../Eye/EyeForm";
+import EyeForm from "../eye/EyeForm";
 
 const Home = () => {
+
+    const { client } = useEye();
 
     return (
         <>

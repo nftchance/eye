@@ -12,7 +12,15 @@ class EyeConsumer(ListModelMixin, PatchModelMixin, GenericAsyncAPIConsumer):
 
     async def connect(self, **kwargs):
         await self.model_change.subscribe()
+
         await super().connect(**kwargs)
+
+        # send connected message
+        await self.send_json({
+            'type': 'connected',
+            'message': 'Connected to the eye consumer'
+        })
+
 
     @model_observer(Blink)
     async def model_change(self, message, observer=None, **kwargs):
