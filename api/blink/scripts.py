@@ -50,10 +50,8 @@ def check_blink(blink_id):
 
     channel_layer = get_channel_layer()
 
-    eye = Eye.objects.filter(blinks__in=[blink]).first()
-
     async_to_sync(channel_layer.group_send)(
-        'eye_%s' % eye.id,
+        'eye_%s' % blink.eye.id,
         {
             'type': 'get_blink',
             'message': {

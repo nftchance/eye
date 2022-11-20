@@ -1,3 +1,6 @@
 from django.test import TestCase
 
-# Create your tests here.
+# TODO: EyeTestCase
+
+# TODO: BlinkTestCase
+# TODO: blink() method
