@@ -11,7 +11,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("localhost", 6379)],
         },
     },
 }
@@ -31,9 +31,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # third party
+    'rest_framework',
     'channels',
     'django_apscheduler',
-    'rest_framework',
 
     # custom apps
     "blink",

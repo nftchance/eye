@@ -1,3 +1,5 @@
+import datetime 
+
 from rest_framework import serializers
 
 from .models import Blink, Eye
@@ -11,6 +13,14 @@ class EyeSerializer(serializers.ModelSerializer):
 
     created = serializers.ReadOnlyField()
     updated = serializers.ReadOnlyField()
+
+    # convert all datetimes to strings
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        for field in ret:
+            if isinstance(ret[field], datetime.datetime):
+                ret[field] = ret[field].isoformat()
+        return ret
 
     class Meta:
         model = Eye

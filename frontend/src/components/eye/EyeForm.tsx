@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useEye } from '../../hooks/useEye'
+
 interface Field { 
     name: string;
     label: string;
@@ -9,6 +11,8 @@ interface Field {
 }
 
 const EyeForm = () => {
+    const { handleCreate } = useEye();
+
     const initialFields = [
         { name: "name", label: "Name", type: "text", value: "", error: null },
     ];

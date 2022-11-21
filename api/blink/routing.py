@@ -1,11 +1,11 @@
-from django.urls import path
+from django.urls import re_path
 
 from .consumers import (
-    BlinkConsumer,
     EyeConsumer
 )
 
 websocket_urlpatterns = [
-    path("ws/eye/", EyeConsumer.as_asgi()),
-    path("ws/eye/<eye_id>/blink", BlinkConsumer.as_asgi())
+    re_path(r"^ws/eye/$", EyeConsumer.as_asgi()),
+    # support uuid as primary key
+    re_path(r"^ws/eye/(?P<pk>[0-9a-f-]+)/$", EyeConsumer.as_asgi()),
 ]

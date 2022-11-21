@@ -1,53 +1,36 @@
 from djangochannelsrestframework import permissions
-from djangochannelsrestframework.generics import GenericAsyncAPIConsumer
-from djangochannelsrestframework.mixins import ListModelMixin, PatchModelMixin
 from djangochannelsrestframework.observer import model_observer
 
+from .mixins import ManagedModelMixin
 from .models import Blink, Eye
 from .serializers import BlinkSerializer, EyeSerializer
 
-class EyeConsumer(ListModelMixin, PatchModelMixin, GenericAsyncAPIConsumer):
+class EyeConsumer(ManagedModelMixin):
     queryset = Eye.objects.all()
     serializer_class = EyeSerializer
+    lookup_field = "pk"
 
-    async def connect(self, **kwargs):
-        await self.model_change.subscribe()
+    permissions = (permissions.AllowAny,)
 
-        await super().connect(**kwargs)
-
-        # send connected message
-        await self.send_json({
-            'type': 'connected',
-            'message': 'Connected to the eye consumer'
-        })
-
-
-    @model_observer(Blink)
+    # Creatde a dynamic model_change that can be used for any model without knowing what class it will be used by
+    @model_observer(Eye)
     async def model_change(self, message, observer=None, **kwargs):
         await self.send_json(message)
 
     @model_change.serializer
-    def serialize_model_change(self, instance, action, **kwargs):
-        return dict(
-            action=action,
-            data=self.serializer_class(instance).data
-        ) 
+    def model_serialize(self, instance, action, **kwargs):
+        return dict(data=EyeSerializer(instance=instance).data, action=action.value)
 
-class BlinkConsumer(ListModelMixin, PatchModelMixin, GenericAsyncAPIConsumer):
+class BlinkConsumer(ManagedModelMixin):
     queryset = Blink.objects.all()
     serializer_class = BlinkSerializer
+    permissions = (permissions.AllowAny,)
 
-    async def connect(self, **kwargs):
-        await self.model_change.subscribe()
-        await super().connect(**kwargs)
-
+    # Creatde a dynamic model_change that can be used for any model without knowing what class it will be used by
     @model_observer(Blink)
     async def model_change(self, message, observer=None, **kwargs):
         await self.send_json(message)
 
     @model_change.serializer
-    def serialize_model_change(self, instance, action, **kwargs):
-        return dict(
-            action=action,
-            data=self.serializer_class(instance).data
-        )
+    def model_serialize(self, instance, action, **kwargs):
+        return dict(data=BlinkSerializer(instance=instance).data, action=action.value)
