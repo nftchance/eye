@@ -8,7 +8,10 @@ import { useEye } from "../../hooks";
 export const EyesContext = createContext({
     connected: false,
     eyes: [] as EyeType[],
-    send: (message: string) => {},
+    send: (
+        message: string,
+        callback: (response: IMessageEvent) => void 
+    ) => {},
 });
 
 export const EyesContextProvider = ({

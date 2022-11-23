@@ -1,8 +1,10 @@
-✔ Add the ability to create a new eye @done(22-11-23 15:37)
-  ☐ Figure out how to redirect to the newly created eye
 ☐ Add the ability to edit a eye
 
 Archive:
+  ✔ Add the ability to create a new eye @done(22-11-23 15:37)
+  ✔ Figure out how to redirect to the newly created eye @done(22-11-23 16:58)
+  ✔ Implement callback engine that supports websocket async interaction and lack of immediate response @done(22-11-23 16:59)
+    Notes: We cannot just create another `.onMessage` beacuse then the already existing one would be called.
   ✔ Get the database up and running with a model @done(22-11-18 13:54)
   ✔ Get the script running that will schedule all the blinks @done(22-11-18 13:54)
   ✔ Get the script running that will blink @done(22-11-18 13:55)

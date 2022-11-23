@@ -17,6 +17,7 @@ const Eyes = () => {
                         <div key={eye.id}>
                             <Link to={`/eye/${eye.id}`}>
                                 <h2>{eye.name}</h2>
+                                <p>{eye.description}</p>
                             </Link>
                         </div>
                     ))}
