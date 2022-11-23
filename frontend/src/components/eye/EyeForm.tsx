@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+
+import { EyesContext } from '../contexts/EyesContext';
 
 interface Field { 
     name: string;
@@ -9,6 +11,8 @@ interface Field {
 }
 
 const EyeForm = () => {
+    const { send } = useContext(EyesContext);
+
     const initialFields = [
         { name: "name", label: "Name", type: "text", value: "", error: null },
     ];
@@ -56,11 +60,24 @@ const EyeForm = () => {
             return
         }
 
-        // submit the form
-        console.log("submit the form");
+        // Actually submit the create request now with the websocket client from the EyesContext
+        // and then redirect to the page of the newly created eye
+        send(JSON.stringify({
+            action: "create",
+            data: {
+                name: fields[0].value,
+                description: "Test description"
+            },
+            request_id: new Date().getTime()
+        }));
 
         // reset the form
         setFields(initialFields);
+    };
+
+    const handleSubmitResponse = (e: any) => {
+        console.log('submit the request and received back');
+        console.log(e);
     };
 
     return (

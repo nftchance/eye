@@ -14,6 +14,12 @@ const useEye = (eyeId: string | undefined) => {
     const [connected, setConnected] = useState(false);
     const [eyes, setEyes] = useState<Eye[]>([]);
 
+    const send = (message: string) => {
+        if (client.readyState === client.OPEN) {
+            client.send(message);
+        }
+    };
+
     useEffect(() => {
         client.onopen = () => {
             if (eyeId) {
@@ -52,9 +58,9 @@ const useEye = (eyeId: string | undefined) => {
     }, [eyeId]);
 
     return {
-        client,
         connected,
-        eyes
+        eyes,
+        send,
     };
 }
 

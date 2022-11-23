@@ -1,5 +1,6 @@
-☐ Add the ability to create a new blink
-☐ Add the ability to edit a blink
+✔ Add the ability to create a new eye @done(22-11-23 15:37)
+  ☐ Figure out how to redirect to the newly created eye
+☐ Add the ability to edit a eye
 
 Archive:
   ✔ Get the database up and running with a model @done(22-11-18 13:54)
