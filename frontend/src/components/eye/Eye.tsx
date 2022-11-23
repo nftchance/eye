@@ -1,24 +1,17 @@
+import { useContext } from 'react';
+
 import { useParams } from 'react-router-dom';
 
-import { useBlinks, useEye } from '../../hooks';
+import { EyesContext } from '../contexts/EyesContext';
 
 import "./Eye.css";
 
 const Eye = () => {
+    const { eyes } = useContext(EyesContext);
+
     const { eyeId } = useParams<{ eyeId: string }>();
 
-    const { 
-        client,
-        connected,
-        eyes
-    } = useEye(eyeId);
-
     const eye = eyes?.find(eye => eye.id === eyeId);
-
-    // const {
-    //     blinks,
-    //     error
-    // } = useBlinks({ eyeId });
 
     return (
         <>
@@ -27,13 +20,6 @@ const Eye = () => {
             {eye && <div className="eye">
                 <h2>{eye.name}</h2>
             </div>}
-
-            {/* {blinks && <div className="blinks">{blinks.map(blink => (
-                <Blink
-                    key={blink.id}
-                    blink={blink}
-                />
-            ))}</div>} */}
         </>
     )
 }

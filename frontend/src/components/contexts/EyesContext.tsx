@@ -1,8 +1,30 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
-import { useEye } from '../../hooks';
+import { Eye as EyeType } from "../../types";
 
-const
+import { useEye } from "../../hooks";
 
+export const EyesContext = createContext({
+    connected: false,
+    eyes: [] as EyeType[],
+});
 
-export default EyeContext;
+export const EyesContextProvider = ({
+    children
+}: {
+    children: React.ReactNode
+}) => {
+    const {
+        connected,
+        eyes
+    } = useEye(undefined);
+
+    return (
+        <EyesContext.Provider value={{
+            connected,
+            eyes
+        }}>
+            {children}
+        </EyesContext.Provider>
+    );
+};
