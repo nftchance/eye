@@ -22,14 +22,17 @@ const Eye = () => {
             {eye && <>
                 <div className="eye">
                     <h2>{eye.name}</h2>
-                    {eye.description && <p>{eye.description}</p>}
+                    {eye.description ?? <p>{eye.description}</p>}
                 </div>
 
                 <EyeForm eye={eye} />
 
                 <h2>Blinks ({eye.blinks.length})</h2>
-                {eye.blinks.map(blink => <div key={blink.id}>
+
+                {eye.blinks.map((blink, index) => <div key={index}>
+                    <p>Test</p>
                     <p>{blink.url}</p>
+                    <p>{blink.frequency}</p>
                 </div>)}
             </>}
         </>

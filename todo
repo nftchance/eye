@@ -1,3 +1,9 @@
+✔ Figure out how to get blinks of an eye @done(22-11-23 21:47)
+  Notes: this is done but I don't think its setup exactly how I would want
+☐ Figure out how to subscribe to changes of blinks on an eye
+  ☐ make sure they are updating the front end
+☐ Figure out how to add a blink to an eye through the front end
+  Notes: I think if we are just subscribing to model changes of organizations we would have to be connected to the blinks endpoint. It would me far more ideal though if we could just append the addition of listening to models that are assigned to the models we've already subscribed to. I think this is possible, but I'm not sure how to do it.
 
 Archive:
   ✔ Add the ability to edit a eye @done(22-11-23 17:57)

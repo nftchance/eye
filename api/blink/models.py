@@ -17,6 +17,10 @@ class Eye(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def blinks(self):
+        return Blink.objects.filter(eye=self)
+
     class Meta:
         ordering = ('created',)
 

@@ -1,26 +1,24 @@
-import datetime 
-
 from rest_framework import serializers
+from rest_framework.fields import UUIDField
 
+from .mixins import SerializerRepresentationMixin
 from .models import Blink, Eye
 
-class EyeSerializer(serializers.ModelSerializer):
-    blinks = serializers.PrimaryKeyRelatedField(
-        many=True,
-        required=False,
-        read_only=True
-    )
+class EyeSerializer(
+    SerializerRepresentationMixin, 
+    serializers.ModelSerializer
+):
+    # return the serializer of the blinks
+    blinks = serializers.SerializerMethodField()
 
     created = serializers.ReadOnlyField()
     updated = serializers.ReadOnlyField()
 
-    # convert all datetimes to strings
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        for field in ret:
-            if isinstance(ret[field], datetime.datetime):
-                ret[field] = ret[field].isoformat()
-        return ret
+    def get_blinks(self, obj):
+        return BlinkSerializer(
+            obj.blinks.all(), 
+            many=True
+        ).data
 
     class Meta:
         model = Eye
@@ -33,10 +31,11 @@ class EyeSerializer(serializers.ModelSerializer):
             'updated'
         )
 
-class BlinkSerializer(serializers.ModelSerializer):
-    eye = EyeSerializer(read_only=True)
-
-    status = serializers.ReadOnlyField()
+class BlinkSerializer(
+    SerializerRepresentationMixin,
+    serializers.ModelSerializer
+):
+    # status = serializers.ReadOnlyField()
     scheduled = serializers.ReadOnlyField()
 
     created = serializers.ReadOnlyField()
@@ -46,11 +45,10 @@ class BlinkSerializer(serializers.ModelSerializer):
         model = Blink
         fields = (
             'id',
-            'eye',
             'status',
-            'frequency',
             'url',
+            'frequency',
             'scheduled',
             'created',
-            'updated',
+            'updated'
         )

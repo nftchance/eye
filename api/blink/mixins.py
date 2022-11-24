@@ -1,3 +1,5 @@
+import datetime
+
 from djangochannelsrestframework.mixins import (
     ListModelMixin,
     RetrieveModelMixin,
@@ -7,6 +9,15 @@ from djangochannelsrestframework.mixins import (
     DeleteModelMixin,
 )
 from djangochannelsrestframework.generics import GenericAsyncAPIConsumer
+
+class SerializerRepresentationMixin:
+    # convert all datetimes to strings
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        for field in ret:
+            if isinstance(ret[field], datetime.datetime):
+                ret[field] = ret[field].isoformat()
+        return ret
 
 class ConnectedMixin:
     async def connect(self, *args, **kwargs):
