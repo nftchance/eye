@@ -97,7 +97,7 @@ const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
 
         // TODO: Handle errors
 
-        if(eye === undefined) navigate(`/eye/${data.id}`);
+        if (eye === undefined) navigate(`/eye/${data.id}`);
     };
 
     useEffect(() => {
@@ -115,8 +115,13 @@ const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
     return (
         <form onSubmit={handleSubmit}>
             {fields.map((field) => (
-                <div key={field.name}>
-                    <label htmlFor={field.name}>{field.label}</label>
+                <div key={field.name} className="input-group">
+                    <label
+                        htmlFor={field.name}
+                    >
+                        {field.label}
+                    </label>
+
                     <input
                         type={field.type}
                         id={field.name}
@@ -129,7 +134,7 @@ const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
                 </div>
             ))}
 
-            <button type="submit">Create</button>
+            <button type="submit">Save</button>
         </form>
     )
 }

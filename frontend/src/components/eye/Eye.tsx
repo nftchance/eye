@@ -19,12 +19,19 @@ const Eye = () => {
         <>
             <h1>Eye</h1>
 
-            {eye && <div className="eye">
-                <h2>{eye.name}</h2>
-                {eye.description && <p>{eye.description}</p>}
-            </div>}
+            {eye && <>
+                <div className="eye">
+                    <h2>{eye.name}</h2>
+                    {eye.description && <p>{eye.description}</p>}
+                </div>
 
-            <EyeForm eye={eye} />
+                <EyeForm eye={eye} />
+
+                <h2>Blinks ({eye.blinks.length})</h2>
+                {eye.blinks.map(blink => <div key={blink.id}>
+                    <p>{blink.url}</p>
+                </div>)}
+            </>}
         </>
     )
 }

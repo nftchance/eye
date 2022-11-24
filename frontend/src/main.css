@@ -17,8 +17,32 @@ body {
   padding: 2rem;
 }
 
-p, a {
+p, a, label, input {
   text-decoration: none;
   color: rgba(255, 255, 255, .85);
   font-size: 12px;
+}
+
+label { 
+  margin-bottom: 5px;
+}
+
+input { 
+  background: #2f2f2f;
+  border: none;
+  padding: 0.25rem 1rem;
+  border-radius: 4px;
+}
+
+button { 
+  background: #2f2f2f;
+  color: #ffffff;
+  padding: 0.25rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.input-group { 
+  display: grid;
+  margin-bottom: 10px;
 }
