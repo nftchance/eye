@@ -1,6 +1,6 @@
-☐ Add the ability to edit a eye
 
 Archive:
+  ✔ Add the ability to edit a eye @done(22-11-23 17:57)
   ✔ Add the ability to create a new eye @done(22-11-23 15:37)
   ✔ Figure out how to redirect to the newly created eye @done(22-11-23 16:58)
   ✔ Implement callback engine that supports websocket async interaction and lack of immediate response @done(22-11-23 16:59)

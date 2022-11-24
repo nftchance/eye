@@ -1,8 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import { EyesContext } from '../contexts/EyesContext';
+
+import { Eye } from "../../types";
 
 interface Field {
     name: string;
@@ -12,17 +14,12 @@ interface Field {
     error: string | null;
 }
 
-const EyeForm = () => {
+const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
     const navigate = useNavigate();
 
     const { send } = useContext(EyesContext);
 
-    const initialFields = [
-        { name: "name", label: "Name", type: "text", value: "", error: null },
-        { name: "description", label: "Description", type: "text", value: "", error: null },
-    ];
-
-    const [fields, setFields] = useState<Field[]>(initialFields);
+    const [fields, setFields] = useState<Field[]>([]);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -40,11 +37,7 @@ const EyeForm = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(fields);
 
-        // validate the fields
-        // if there are errors, set the errors
-        // if there are no errors, submit the form
         fields.forEach((field) => {
             if (field.value === "") {
                 setFields((prevFields) => {
@@ -69,34 +62,61 @@ const EyeForm = () => {
         // and then redirect to the page of the newly created eye
         const requestId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-        console.log('sending request');
-
         // Send the request that will create the eye in the database and handle the response callback
         // to redirect to the page of the newly created eye
-        await send(
-            JSON.stringify({
+
+        // store two variables as the request and then both of them as separate args for send
+        let request = {
+            message: JSON.stringify({
                 action: "create",
                 data: {
                     name: fields[0].value,
                     description: fields[1].value
                 },
                 request_id: requestId
-            }), 
-            handleSubmitResponse
-        );
+            }),
+            callback: handleSubmitResponse
+        }
+
+        if (eye !== undefined) {
+            request = {
+                message: JSON.stringify({
+                    action: "update",
+                    data: {
+                        name: fields[0].value,
+                        description: fields[1].value
+                    },
+                    request_id: requestId,
+                    pk: eye.id
+                }),
+                callback: handleSubmitResponse
+            }
+        }
+
+        await send(request.message, request.callback);
     };
 
     const handleSubmitResponse = (
-        response: any 
+        response: any
     ) => {
         const data = JSON.parse(response.data).data;
 
-        setFields(initialFields);
-
         // TODO: Handle errors
 
-        navigate(`/eye/${data.id}`);
+        if(eye === undefined) navigate(`/eye/${data.id}`);
     };
+
+    useEffect(() => {
+        const initialFields = eye === undefined ? [
+            { name: "name", label: "Name", type: "text", value: "", error: null },
+            { name: "description", label: "Description", type: "text", value: "", error: null },
+        ] : [
+            { name: "name", label: "Name", type: "text", value: eye.name, error: null },
+            { name: "description", label: "Description", type: "text", value: eye.description, error: null },
+        ];
+
+        setFields(initialFields);
+    }, [eye]);
 
     return (
         <form onSubmit={handleSubmit}>

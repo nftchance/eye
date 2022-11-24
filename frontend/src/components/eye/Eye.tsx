@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 
 import { EyesContext } from '../contexts/EyesContext';
 
+import EyeForm from './EyeForm';
+
 import "./Eye.css";
 
 const Eye = () => {
@@ -21,6 +23,8 @@ const Eye = () => {
                 <h2>{eye.name}</h2>
                 <p>{eye.description}</p>
             </div>}
+
+            <EyeForm eye={eye} />
         </>
     )
 }
