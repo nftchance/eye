@@ -21,7 +21,7 @@ const Eye = () => {
 
             {eye && <div className="eye">
                 <h2>{eye.name}</h2>
-                <p>{eye.description}</p>
+                {eye.description && <p>{eye.description}</p>}
             </div>}
 
             <EyeForm eye={eye} />

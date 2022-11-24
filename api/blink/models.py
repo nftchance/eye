@@ -17,6 +17,9 @@ class Eye(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('created',)
+
 class Blink(models.Model):
     PENDING, HALTED, FAILED, SUCCESS, ERROR = 'P', 'H', 'F', 'S', 'E'
 

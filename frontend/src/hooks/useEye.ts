@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { IMessageEvent, w3cwebsocket as W3CWebSocket } from "websocket";
+import ReconnectingWebSocket from 'reconnecting-websocket';
+import { IMessageEvent } from "websocket";
 
 import { Callbacks, Eye } from '../types';
 
@@ -9,7 +10,7 @@ const useEye = (eyeId: string | undefined) => {
     const client = useMemo(() => {
         const url = `ws://localhost:8000/ws/eye/${eyeId ? `${eyeId}/` : ''}`;
 
-        return new W3CWebSocket(url)
+        return new ReconnectingWebSocket(url)
     }, []);
 
     // Callback dictionary that handles the post-processing when we need
@@ -50,7 +51,6 @@ const useEye = (eyeId: string | undefined) => {
 
             if (callback) {
                 callback(message);
-
                 delete callbacks[data.request_id];
 
                 return

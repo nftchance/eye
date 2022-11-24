@@ -4,15 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { EyesContext } from '../contexts/EyesContext';
 
-import { Eye } from "../../types";
-
-interface Field {
-    name: string;
-    label: string;
-    type: string;
-    value: string;
-    error: string | null;
-}
+import { Eye, Field } from "../../types";
 
 const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
     const navigate = useNavigate();
@@ -38,8 +30,10 @@ const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        let valid = true;
+
         fields.forEach((field) => {
-            if (field.value === "") {
+            if (field.required === true && field.value === "") {
                 setFields((prevFields) => {
                     return prevFields.map((prevField) => {
                         if (prevField.name === field.name) {
@@ -49,13 +43,13 @@ const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
                         return prevField;
                     });
                 });
+
+                valid = false;
             }
         });
 
-        // if there are no errors, submit the form
-        const hasErrors = fields.some((field) => field.error !== null);
-        if (hasErrors) {
-            return
+        if (!valid) {
+            return;
         }
 
         // Actually submit the create request now with the websocket client from the EyesContext
@@ -108,11 +102,11 @@ const EyeForm = ({ eye = undefined }: { eye: Eye | undefined }) => {
 
     useEffect(() => {
         const initialFields = eye === undefined ? [
-            { name: "name", label: "Name", type: "text", value: "", error: null },
-            { name: "description", label: "Description", type: "text", value: "", error: null },
+            { name: "name", label: "Name", type: "text", value: "", required: true, error: null },
+            { name: "description", label: "Description", type: "text", value: "", required: false, error: null },
         ] : [
-            { name: "name", label: "Name", type: "text", value: eye.name, error: null },
-            { name: "description", label: "Description", type: "text", value: eye.description, error: null },
+            { name: "name", label: "Name", type: "text", value: eye.name, required: true, error: null },
+            { name: "description", label: "Description", type: "text", value: eye.description, required: false, error: null },
         ];
 
         setFields(initialFields);

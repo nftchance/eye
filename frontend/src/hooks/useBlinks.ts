@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { IMessageEvent, w3cwebsocket as W3CWebSocket } from "websocket";
+import ReconnectingWebSocket from 'reconnecting-websocket';
+import { IMessageEvent } from "websocket";
 
 import { Blink, Response } from "../types"
 
@@ -20,7 +21,7 @@ const useBlinks = ({
     const [error, setError] = useState<{} | null>(null);
 
     const client = useMemo(
-        () => new W3CWebSocket(`ws://127.0.0.1:8000/ws/${eyeId}/`),
+        () => new ReconnectingWebSocket(`ws://127.0.0.1:8000/ws/${eyeId}/`),
         [eyeId]
     )
 

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { IMessageEvent, w3cwebsocket as W3CWebSocket } from "websocket";
+import { IMessageEvent } from "websocket";
 import { Eye as EyeType } from "../../types";
 
 import { useEye } from "../../hooks";
