@@ -45,6 +45,17 @@ const useEye = (eyeId: string | undefined) => {
         client.onmessage = (message: IMessageEvent) => {
             const data = JSON.parse(message.data.toString());
 
+            // Call the callback if it exists and remove it from the dictionary
+            const callback = callbacks[data.request_id];
+
+            if (callback) {
+                callback(message);
+
+                delete callbacks[data.request_id];
+
+                return
+            }
+
             if (data.action === 'connected') {
                 setConnected(true);
             } else if (data.action === 'list') {
@@ -59,15 +70,6 @@ const useEye = (eyeId: string | undefined) => {
                 setEyes([data.data]);
             } else {
                 console.log('Unknown action', data);
-            }
-
-            // Call the callback if it exists and remove it from the dictionary
-            const callback = callbacks[data.request_id];
-
-            if (callback) {
-                callback(message);
-
-                delete callbacks[data.request_id];
             }
         }
     }, []);
