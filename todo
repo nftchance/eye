@@ -1,9 +1,15 @@
 ✔ Figure out how to get blinks of an eye @done(22-11-23 21:47)
   Notes: this is done but I don't think its setup exactly how I would want
-☐ Figure out how to subscribe to changes of blinks on an eye
-  ☐ make sure they are updating the front end
-☐ Figure out how to add a blink to an eye through the front end
+✔ Figure out how to subscribe to changes of blinks on an eye @done(22-11-24 18:27)
+  ✔ make sure they are updating the front end @done(22-11-24 18:27)
+✔ Figure out how to add a blink to an eye through the front end @done(22-11-24 18:27)
   Notes: I think if we are just subscribing to model changes of organizations we would have to be connected to the blinks endpoint. It would me far more ideal though if we could just append the addition of listening to models that are assigned to the models we've already subscribed to. I think this is possible, but I'm not sure how to do it.
+    Notes: I figured out how to do this and while it is rather straight forward to get the API returning the data that we want, handling it on the front-end is not ideal. When we listen to the relational changes through the API, we get the updates however they carry the same actions as the original model. This means that we have to handle the updates on the front-end in a way that doesn't cause the front-end to re-render. This is not ideal and I think we should look into a way to handle this better.
+      Even if we could get things to work better the front-end eye hook would just end up being a mess and it would not be straight forward to understand what is going on. I think we should look into a way to handle this better. This is also even worse because in order to trigger this, we have to fire a subscription event -- then if we separate this by object this issue only becomes worse.
+    ✔ Instead of utilizing binded models, create a separate endpoint for the blinks so that we can just update them all in the background since if you are listening to that query you have reason to be listening to the blinks. This would also allow us to have a more robust way of handling the blinks on the front-end. @done(22-11-24 18:27)
+☐ By not having the binded model when a new object is added a m2m, the eye is not updated.
+  Notes: Right now everything is built on the blink endpoint however we still need to update the 
+
 
 Archive:
   ✔ Add the ability to edit a eye @done(22-11-23 17:57)

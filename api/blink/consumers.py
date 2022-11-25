@@ -24,6 +24,8 @@ class EyeConsumer(ManagedModelMixin):
 class BlinkConsumer(ManagedModelMixin):
     queryset = Blink.objects.all()
     serializer_class = BlinkSerializer
+    lookup_field = "pk"
+    
     permissions = (permissions.AllowAny,)
 
     # Creatde a dynamic model_change that can be used for any model without knowing what class it will be used by

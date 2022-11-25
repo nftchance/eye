@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { EyesContext } from '../contexts/EyesContext';
+import { EyesContext } from '../../contexts/EyesContext';
 
 const Eyes = () => {
     const { eyes } = useContext(EyesContext);

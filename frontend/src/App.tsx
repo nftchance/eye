@@ -2,7 +2,7 @@ import { Link, Routes, Route } from 'react-router-dom'
 
 import loadable from '@loadable/component';
 
-import { EyesContextProvider } from './components/contexts/EyesContext';
+import { EyesContextProvider } from './contexts/EyesContext';
 
 const LoadableHome = loadable(() => import('./components/home/Home'));
 const LoadableEyes = loadable(() => import('./components/eye/Eyes'));

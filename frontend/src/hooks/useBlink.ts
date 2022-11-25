@@ -3,12 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { IMessageEvent } from "websocket";
 
-import { Callbacks, Eye } from '../types';
+import { Callbacks, Blink } from '../types';
 
-const useEye = () => {
+const useBlink = () => {
     // Websocket client that connects to the Eye consumer
     const client = useMemo(() => {
-        const url = 'ws://localhost:8000/ws/eye/';
+        const url = 'ws://localhost:8000/ws/blink/';
 
         return new ReconnectingWebSocket(url)
     }, []);
@@ -18,7 +18,7 @@ const useEye = () => {
     const callbacks = useMemo<Callbacks>(() => ({}), []);
 
     const [connected, setConnected] = useState(false);
-    const [eyes, setEyes] = useState<Eye[]>([]);
+    const [blinks, setBlinks] = useState<Blink[]>([]);
 
     const send = async (
         message: string,
@@ -48,19 +48,22 @@ const useEye = () => {
 
     const handleAction = (message: IMessageEvent) => {
         const data = JSON.parse(message.data.toString());
+
+        // We encountered an error
+        if(data.data === null) return;
         
         if (data.action === 'connected') {
             setConnected(true);
         } else if (data.action === 'list') {
-            setEyes(data.data);
+            setBlinks(data.data);
         } else if (data.action === 'update') {
-            setEyes(eyes => eyes.map(eye => eye.id === data.data.id ? data.data : eye));
+            setBlinks(eyes => eyes.map(eye => eye.id === data.data.id ? data.data : eye));
         } else if (data.action === 'create') {
-            setEyes(eyes => [...eyes, data.data]);
+            setBlinks(eyes => [...eyes, data.data]);
         } else if (data.action === 'delete') {
-            setEyes(eyes => eyes.filter(eye => eye.id !== data.data.id));
+            setBlinks(eyes => eyes.filter(eye => eye.id !== data.data.id));
         } else if (data.action === 'retrieve') {
-            setEyes([data.data]);
+            setBlinks([data.data]);
         } else {
             console.log('Unknown action', data);
         }
@@ -86,9 +89,9 @@ const useEye = () => {
 
     return {
         connected,
-        eyes,
+        blinks,
         send,
     };
 }
 
-export { useEye };
+export { useBlink };

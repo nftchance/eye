@@ -2,37 +2,55 @@ import { useContext } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { EyesContext } from '../contexts/EyesContext';
+import { BlinksContext, EyesContext } from '../../contexts';
 
-import EyeForm from './EyeForm';
+import { useBlinkFields, useEyeFields } from '../../hooks';
+
+import Form from '../form/Form';
 
 import "./Eye.css";
 
 const Eye = () => {
-    const { eyes } = useContext(EyesContext);
+    const { eyes, send: eyesSend } = useContext(EyesContext);
+    const { blinks, send: blinksSend } = useContext(BlinksContext);
 
     const { eyeId } = useParams<{ eyeId: string }>();
 
     const eye = eyes?.find(eye => eye.id === eyeId);
+    const eyeBlinks = blinks?.filter(blink => blink.eye === eyeId);
+
+    const eyeFields = useEyeFields(eye);
+    const blinkFields = useBlinkFields(eye);
 
     return (
         <>
-            <h1>Eye</h1>
-
             {eye && <>
                 <div className="eye">
-                    <h2>{eye.name}</h2>
+                    <h1>{eye.name}</h1>
                     {eye.description ?? <p>{eye.description}</p>}
                 </div>
+                
+                <Form
+                    obj={eye}
+                    send={eyesSend}
+                    initialFields={eyeFields}
+                />
 
-                <EyeForm eye={eye} />
+                <h2>Blinks ({eyeBlinks.length})</h2>
 
-                <h2>Blinks ({eye.blinks.length})</h2>
+                <Form
+                    send={blinksSend}
+                    initialFields={blinkFields}
+                />
 
-                {eye.blinks.map((blink, index) => <div key={index}>
-                    <p>Test</p>
+                {eyeBlinks.map((blink, index) => <div key={index}>
+                    <hr/>
                     <p>{blink.url}</p>
                     <p>{blink.frequency}</p>
+                    <p>{new Date(blink.scheduled).toLocaleString()}</p>
+
+                    <p>{new Date(blink.created).toLocaleString()}</p>
+                    <p>{new Date(blink.updated).toLocaleString()}</p>
                 </div>)}
             </>}
         </>

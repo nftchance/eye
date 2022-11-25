@@ -2,9 +2,9 @@ interface Field {
     name: string;
     label: string;
     type: string;
-    value: string;
-    required: boolean;
+    value: string | Number;
     error: string | null;
+    hidden?: boolean;
 }
 
 export type { Field };

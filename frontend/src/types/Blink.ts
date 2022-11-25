@@ -1,4 +1,5 @@
 interface Blink {
+    eye: number | undefined;
     id: number;
     frequency: number;
     url: string;

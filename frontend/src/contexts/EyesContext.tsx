@@ -1,17 +1,19 @@
 import { createContext } from "react";
 
 import { IMessageEvent } from "websocket";
-import { Eye as EyeType } from "../../types";
+import { Eye as EyeType } from "../types";
 
-import { useEye } from "../../hooks";
+import { useBlink, useEye } from "../hooks";
+
+import { BlinksContextProvider } from "./BlinksContext";
 
 export const EyesContext = createContext({
     connected: false,
     eyes: [] as EyeType[],
     send: (
         message: string,
-        callback: (response: IMessageEvent) => void 
-    ) => {},
+        callback: (response: IMessageEvent) => void
+    ) => { },
 });
 
 export const EyesContextProvider = ({
@@ -23,7 +25,7 @@ export const EyesContextProvider = ({
         connected,
         eyes,
         send
-    } = useEye(undefined);
+    } = useEye();
 
     return (
         <EyesContext.Provider value={{
@@ -31,7 +33,9 @@ export const EyesContextProvider = ({
             eyes,
             send,
         }}>
-            {children}
+            <BlinksContextProvider>
+                {children}
+            </BlinksContextProvider>
         </EyesContext.Provider>
     );
 };

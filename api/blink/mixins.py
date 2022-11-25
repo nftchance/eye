@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 from djangochannelsrestframework.mixins import (
     ListModelMixin,
@@ -17,6 +18,9 @@ class SerializerRepresentationMixin:
         for field in ret:
             if isinstance(ret[field], datetime.datetime):
                 ret[field] = ret[field].isoformat()
+            if isinstance(ret[field], uuid.UUID):
+                ret[field] = str(ret[field])
+
         return ret
 
 class ConnectedMixin:

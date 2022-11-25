@@ -8,17 +8,8 @@ class EyeSerializer(
     SerializerRepresentationMixin, 
     serializers.ModelSerializer
 ):
-    # return the serializer of the blinks
-    blinks = serializers.SerializerMethodField()
-
     created = serializers.ReadOnlyField()
     updated = serializers.ReadOnlyField()
-
-    def get_blinks(self, obj):
-        return BlinkSerializer(
-            obj.blinks.all(), 
-            many=True
-        ).data
 
     class Meta:
         model = Eye
@@ -26,7 +17,6 @@ class EyeSerializer(
             'id',
             'name',
             'description',
-            'blinks',
             'created',
             'updated'
         )
@@ -35,7 +25,7 @@ class BlinkSerializer(
     SerializerRepresentationMixin,
     serializers.ModelSerializer
 ):
-    # status = serializers.ReadOnlyField()
+    status = serializers.ReadOnlyField()
     scheduled = serializers.ReadOnlyField()
 
     created = serializers.ReadOnlyField()
@@ -45,6 +35,7 @@ class BlinkSerializer(
         model = Blink
         fields = (
             'id',
+            'eye',
             'status',
             'url',
             'frequency',
