@@ -90,9 +90,11 @@ const Form = ({
             return;
         }
 
-        setFields(initialFields);
+        if (obj === undefined) {
+            setFields(initialFields);
 
-        if (redirect && obj === undefined) navigate(`${redirect}${response.data.id}`);
+            if (redirect) navigate(`${redirect}${response.data.id}`);
+        }
     };
 
     return (
