@@ -3,7 +3,7 @@ import { createContext } from "react";
 import { IMessageEvent } from "websocket";
 import { Eye as EyeType } from "../types";
 
-import { useBlink, useEye } from "../hooks";
+import { useSocket } from "../hooks";
 
 import { BlinksContextProvider } from "./BlinksContext";
 
@@ -23,14 +23,16 @@ export const EyesContextProvider = ({
 }) => {
     const {
         connected,
-        eyes,
+        data,
         send
-    } = useEye();
+    } = useSocket({ 
+        url: 'ws://localhost:8000/ws/eye/'
+    });
 
     return (
         <EyesContext.Provider value={{
             connected,
-            eyes,
+            eyes: data as EyeType[],
             send,
         }}>
             <BlinksContextProvider>

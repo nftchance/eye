@@ -1,4 +1,3 @@
-export { useBlink } from './useBlink';
-export { useEye } from './useEye';
+export { useSocket } from './useSocket';
 
 export { useBlinkFields, useEyeFields } from './useFields';

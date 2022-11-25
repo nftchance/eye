@@ -75,8 +75,6 @@ const Form = ({
     ) => {
         const response = JSON.parse(message.data);
 
-        console.log(response?.errors)
-
         // If there are errors reflect them in the form
         if (response.errors?.length !== 0) {
             setFields((prevFields) => {

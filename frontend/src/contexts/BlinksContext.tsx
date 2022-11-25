@@ -1,11 +1,9 @@
 import { createContext } from "react";
 
-import { useParams } from "react-router-dom";
-
 import { IMessageEvent } from "websocket";
 import { Blink as BlinkType } from "../types";
 
-import { useBlink } from "../hooks";
+import { useSocket } from "../hooks";
 
 export const BlinksContext = createContext({
     connected: false,
@@ -23,16 +21,16 @@ export const BlinksContextProvider = ({
 }) => {
     const {
         connected,
-        blinks,
+        data,
         send
-    } = useBlink();
-
-    const { eyeId } = useParams<{ eyeId: string }>();
+    } = useSocket({ 
+        url: 'ws://localhost:8000/ws/blink/'
+    });
 
     return (
         <BlinksContext.Provider value={{
             connected,
-            blinks,
+            blinks: data as BlinkType[],
             send,
         }}>
             {children}
