@@ -4,6 +4,7 @@
     display: grid;
     grid-template-columns: auto auto;
     padding: 20px;
+    margin-top: 20px;
 }
 
 .blink .status-indicator { 

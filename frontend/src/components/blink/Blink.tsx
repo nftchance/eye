@@ -1,5 +1,7 @@
 import { Blink as BlinkType } from "../../types";
 
+import { useCountdown } from "../../hooks";
+
 import "./Blink.css";
 
 const Blink = ({
@@ -7,6 +9,8 @@ const Blink = ({
 }: {
     blink: BlinkType
 }) => {
+    const { secondsUntil } = useCountdown(blink.scheduled)
+
     return (
         <>
             <a href={blink.url} target="_blank" rel="noreferrer">
@@ -18,8 +22,8 @@ const Blink = ({
                         <div className={`status-indicator ${blink.status}`}></div>
                         {blink.url}
                     </p>
-                    <p>{blink.frequency} seconds</p>
-                    <p>Scheduled: {blink.scheduled}</p>
+                    <p>Every: {blink.frequency} secs.</p>
+                    <p>In: {secondsUntil} secs.</p>
                 </div>
             </a>
         </>

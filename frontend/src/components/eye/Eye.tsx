@@ -8,6 +8,8 @@ import { useBlinkFields, useEyeFields } from '../../hooks';
 
 import Form from '../form/Form';
 
+import Blink from '../blink/Blink';
+
 import "./Eye.css";
 
 const Eye = () => {
@@ -43,15 +45,7 @@ const Eye = () => {
                     initialFields={blinkFields}
                 />
 
-                {eyeBlinks.map((blink, index) => <div key={index}>
-                    <hr/>
-                    <p>{blink.url}</p>
-                    <p>{blink.frequency}</p>
-                    <p>{new Date(blink.scheduled).toLocaleString()}</p>
-
-                    <p>{new Date(blink.created).toLocaleString()}</p>
-                    <p>{new Date(blink.updated).toLocaleString()}</p>
-                </div>)}
+                {eyeBlinks.map((blink, index) => <Blink key={index} blink={blink} />)}
             </>}
         </>
     )

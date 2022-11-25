@@ -70,7 +70,7 @@ export const useSocket = ({ url }: { url: string }) => {
         } else {
             console.log('Unknown action', data);
         }
-    }
+    }   
 
     useEffect(() => {
         client.onopen = () => {
