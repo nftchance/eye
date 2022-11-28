@@ -20,6 +20,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+AUTH_USER_MODEL="account.Account"
+
 INSTALLED_APPS = [
     'daphne',
 
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
     'django_apscheduler',
 
     # custom apps
+    "account",
     "blink",
 ]
  

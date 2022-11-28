@@ -5,8 +5,16 @@ import uuid
 
 from django.db import models
 
+from account.models import Account
+
 class Eye(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    account = models.ForeignKey(
+        Account,
+        on_delete=models.CASCADE,
+        related_name='eyes'
+    )
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -16,10 +24,6 @@ class Eye(models.Model):
 
     def __str__(self):
         return self.name
-
-    @property
-    def blinks(self):
-        return Blink.objects.filter(eye=self)
 
     class Meta:
         ordering = ('created',)

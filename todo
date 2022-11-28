@@ -1,0 +1,69 @@
+✔ Home page status things to figure out how to filter for specific objects? @done(22-11-28 13:48)
+☐ Figure out how one would store historical changes 
+    ☐ Do we just only ever store the last period of data or can you always retrieve when something went wrong? 
+    ☐ does that mean you can't retrieve things that were successful?
+    ☐ Does that mean if we queued it from multiple places, we would eventually dump the data as it is out of period regardless the redundancy?
+
+☐ authentication 
+✔ associating data to user level relationships is actually pretty confusing since the object just can't always exist @done(22-11-28 16:36)
+    Notes: When creating an eye, we need to know the user so that we can set it to the user. This means, that a user would have to be authenticated to submit the form and it is not exactly safe to allow an individual to directly update other accounts as it would be a security risk.
+        That security risk being that by having the ability to add an individual to any other relation, inherently you have the ability to change the relation beyond your given access level. Meaning, if we were to write an `has_obj_permission` derived on the action, it would still not prevent the user from adding an individual to a relation that they do not have access to. One would have to write a custom extension to the `create`, `update`, `delete` methods to ensure that the user is not adding an individual to a relation that they do not have access to. This is not a problem for the `read` method however they may still have access to more data than they truly need.
+
+        Notes: Because of this, the source of truth (i think) should actually be the eye. Then, then "eyes" of an account will be built through relational query. The creator of an eye, would always be onself, and they should have full permission to edit their Eye. 
+            This means, that if we were connected to the eye endpoint, the list of managers would update, however the data in those wallets would not (if built from the eye serializer). This could be avoided by having a users endpoint, but determining the objects in a user endpoint would be a bit more difficult.
+
+            I (again think) this would be the time to use a nested model observer. 
+
+            Eye --> Adds 3 managers --> Wallets are created for those managers
+                - List of managers from /eye/ updates
+                - We are not connected to /wallet/
+                - Changes to the details of an individual wallet are not reflected in the list of managers
+                    - This can be solved by having a wallet endpoint, however should just subscribe to the related events in the eye consumer. 
+            Eye --> Add 1 member --> Wallet is created for that member
+
+            account:
+                id: 1
+
+                eyes:
+                    eye:
+                        id: 4312-1234-1234-1234
+                        
+                        blinks:
+                            blink:
+                                id: 1
+                            blink:
+                                id: 2
+                            blink:
+                                id: 3
+                    eye:
+                        id: 4312-1234-1234-1234
+                        
+                        blinks:
+                            blink:
+                                id: 1
+                            blink:
+                                id: 2
+                            blink:
+                                id: 3
+
+            The simplest way to do this would probably be to create a special serializer field that creates the object on validation. This would be a bit more complicated than the nested model observer, but would be a bit more flexible.
+
+            Or maybe actually the best way is to just create entirely separate actions for adding and removing managers and members. This would be the most flexible, but would also be the most complicated. The editing of holders and managers wouldn't be inline with the rest of the data, but that makes sense as the multi-select m2m relationship is super fucked when data is being utilized in a different way like this.
+
+
+            What is the best way to handle a m2m relationship when there are lots of accounts associated to as members of an object, but the admin of the object can't edit members directly only add and remove from the object?
+                ☐ Create a special serializer field that creates the object on validation
+                    Notes: This would mean that any time the form is submitted, all the data is validated and created.
+                        -- This means that a user object is created at the time of form submission.
+                        -- This means that with a post we would always have to send the full list in a m2m
+                ☐ Create a nested model observer
+                ☐ Create entirely separate actions for adding and removing managers and members
+
+            Right now, when a request is made the queryset is cleared. This means, that when submitting a request the entire array has to be submit. This is not ideal, but it is the only way to ensure that the data is correct. This allows us to remove a member. Without clearing the queryset, to remove a member we would need a custom action that would remove the member from the queryset. This would be a bit more complicated, but would be a bit more flexible. The unfortunate downside though is that removal of items can't be it's own endpoint alone. So that would mean we've added a `addAccount` and `removeAccount` action to the eye endpoint. This allows us to remove a member but means that our form processing cannot be as generalized.
+
+            On the other side, by building for generalized abstraction and maintaing the requirement of typical m2m relations (requiring the entire state to be passed) it would be less painful now because the data is always up to date thanks to websockets!
+                This path of thinking leaves the one nuance of handling relationships of objects that do not exist yet however that can just be added and abstracted into a field or validator. This seems to be the least nuanced and most beneficial path forward.
+            
+            For the eye form specifically, the user should not be set on the front end and should only be set on the backend. Unfortunately though, when we add Organization transferring like in Badger then we have have it as a settable field otherwise, we again have to write another custom action which is not ideal when it's just a user field that's changing
+
+    Notes: i really do not want to have to write custom functionality every time we need to interface with a user.

@@ -1,14 +1,18 @@
 * {
   box-sizing: border-box;
-  font-family: 'Roboto Mono', sans-serif;
+  font-family: 'Space Mono', monospace;
+}
+
+html { 
+  overflow-x: hidden;
 }
 
 html,
 body {
-  margin: 0;
-  padding: 0;
   background: #0e0e0e;
   color: #fff;
+  margin: 0;
+  padding: 0;
 }
 
 #root {

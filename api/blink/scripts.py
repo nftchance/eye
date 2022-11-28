@@ -48,18 +48,6 @@ def check_blink(blink_id):
     blink = Blink.objects.get(id=blink_id)
     blink.blink()
 
-    channel_layer = get_channel_layer()
-
-    async_to_sync(channel_layer.group_send)(
-        'eye_%s' % blink.eye.id,
-        {
-            'type': 'get_blink',
-            'message': {
-                "id": blink.id,
-            }
-        }
-    )
-
 @util.close_old_connections
 def delete_old_job_executions(max_age=60 * 60):
     DjangoJobExecution.objects.delete_old_job_executions(max_age)

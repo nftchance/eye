@@ -8,7 +8,6 @@ from .serializers import BlinkSerializer, EyeSerializer
 class EyeConsumer(ManagedModelMixin):
     queryset = Eye.objects.all()
     serializer_class = EyeSerializer
-    lookup_field = "pk"
 
     permissions = (permissions.AllowAny,)
 
@@ -24,7 +23,6 @@ class EyeConsumer(ManagedModelMixin):
 class BlinkConsumer(ManagedModelMixin):
     queryset = Blink.objects.all()
     serializer_class = BlinkSerializer
-    lookup_field = "pk"
     
     permissions = (permissions.AllowAny,)
 

@@ -1,6 +1,24 @@
+import { useContext } from 'react';
+
+import { BlinksContext, EyesContext } from '../../contexts';
+
+import { useEyeFields } from '../../hooks';
+
+import Form from '../form/Form';
+
 import "./Home.css";
 
 const Home = () => {
+    const { send } = useContext(EyesContext);
+
+    const { blinks } = useContext(BlinksContext);
+
+    const systemEye = "49413bce-f6e1-46ee-bc58-460168235402";
+
+    const systemBlinks = blinks?.filter(blink => blink.eye === systemEye);
+
+    const eyeFields = useEyeFields().filter(field => field.name === "name");
+
     return (
         <>
             <div className="hero">
@@ -25,11 +43,24 @@ const Home = () => {
                     <h1>Minimize downtime.<br />Decrease response time.<br />Increase resolution speed.</h1>
                     <p className="lead">Access all the benefits of status oracles for every internet service you're running without writing any code.</p>
 
-                    <button>Start now</button>
+                    <div className="hero__content__statuses">
+                        {systemBlinks?.map(blink => (
+                            <div className="hero__content__statuses__status">
+                                <h5>{blink.url}</h5>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
+
+            <Form
+                initialFields={eyeFields}
+                send={send}
+                redirect={`/eye/`}
+                buttonText={"Create eye"}
+            />
         </>
     )
 }
 
-export default Home
+export default Home;

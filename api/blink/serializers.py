@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import UUIDField
 
 from .mixins import SerializerRepresentationMixin
 from .models import Blink, Eye

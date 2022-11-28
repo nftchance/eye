@@ -10,4 +10,6 @@ router.registry.extend(blink_router.registry)
 
 urlpatterns = router.urls + [
     path("admin/", admin.site.urls),
+    # These urls will not be included in the API due to non-conformity of standard
+    path("account/", include("account.urls")),
 ]

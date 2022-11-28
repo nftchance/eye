@@ -8,12 +8,14 @@ const Form = ({
     obj,
     send,
     initialFields,
-    redirect
+    redirect,
+    buttonText
 }: {
     obj?: Eye | Blink,
     send: any,
     initialFields: Field[],
-    redirect?: string
+    redirect?: string,
+    buttonText?: string
 }) => {
     const navigate = useNavigate();
 
@@ -98,7 +100,9 @@ const Form = ({
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form 
+            onSubmit={handleSubmit}
+        >
             {fields.map((field) => (
                 <div
                     key={field.name}
@@ -127,7 +131,7 @@ const Form = ({
                 </div>
             ))}
 
-            <button type="submit">Save</button>
+            <button type="submit">{buttonText || "Save"}</button>
         </form>
     )
 }

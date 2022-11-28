@@ -17,6 +17,7 @@
     left: -45%;
     top: 80%;
     position: absolute;
+    z-index: -1;
 }
 
 .hero .hero__content svg path {
