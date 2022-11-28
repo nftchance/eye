@@ -1,0 +1,47 @@
+.hero {
+    align-content: center;
+    display: grid;
+    text-align: center;
+    position: relative;
+}
+
+.hero .hero__content {
+    max-width: 560px;
+    margin: auto;
+    margin-top: 80px;
+    overflow: hidden;
+}
+
+.hero .hero__content svg {
+    width: 300%;
+    left: -45%;
+    top: 80%;
+    position: absolute;
+}
+
+.hero .hero__content svg path {
+    animation: dash 10s linear infinite;
+    fill: none;
+    opacity: .15;
+    stroke: rgba(255, 255, 255, .85);
+    stroke-width: 2px;
+    stroke-dasharray: 10;
+    stroke-dashoffset: 1000;
+}
+
+.lead {
+    color: rgba(255, 255, 255, .65);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    margin-bottom: 60px;
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: 1000;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
